@@ -18,7 +18,6 @@ transformer-from-scratch/
 │   ├── stuck_points.md     詰まった点と解決の記録
 │   └── learned_items.md    習得項目リスト(完成後)
 ├── src/                 実装コード本体
-├── tests/               モジュール単位の単体テスト
 ├── notebooks/           Jupyter Notebook(動作確認・可視化)
 └── results/             実験結果
     └── comparison.md       LSTMとの性能比較レポート
