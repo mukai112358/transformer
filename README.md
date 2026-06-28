@@ -23,4 +23,11 @@ pip install -r requirements.txt
 
 ## 結果
 
-[results/comparison.md](results/comparison.md) を参照。
+Multi30k 独→英のテストセットでの BLEU:
+
+- Transformer: **36.08**
+- LSTM Seq2Seq (Attention 無し): 20.83
+
+文長別 BLEU では source が長くなるほど Transformer の優位が拡大(+5 → +12.9 → +16.1 → +16.3)。
+
+詳細は [results/comparison.md](results/comparison.md) を参照。
