@@ -1,5 +1,3 @@
-"""BLEU / 文長別精度 / 推論 (Greedy Decode)."""
-
 import math
 
 import torch

@@ -1,38 +1,26 @@
 # Transformer from Scratch
 
-「Attention Is All You Need」(Vaswani et al., 2017) をPyTorchでスクラッチ実装し、LSTMベースラインと性能比較するプロジェクト。
+Vaswani et al. (2017) "Attention Is All You Need" の Transformer を PyTorch で実装し、Multi30k 独→英の翻訳タスクで LSTM Seq2Seq と比較した。
 
-## 状態
+## 構成
 
-実装中
+- `src/` Transformer と LSTM の実装、データ準備、訓練、評価
+- `notebooks/` 各モジュールの動作確認、訓練、評価
+- `notes/` 数式とコードの対応
+- `results/` 比較結果、損失曲線、BLEU グラフ
 
-## ディレクトリ構成
+## 環境
+
+Python 3.10+、PyTorch。Multi30k は `src/data.py` が自動ダウンロード。
 
 ```
-transformer-from-scratch/
-├── README.md            プロジェクト概要(本ファイル)
-├── requirements.txt     依存パッケージ
-├── notes/               学習の記録
-│   ├── learning_log.md     毎日の学習ログ
-│   ├── formula_to_code.md  論文の数式とコードの対応
-│   ├── stuck_points.md     詰まった点と解決の記録
-│   └── learned_items.md    習得項目リスト(完成後)
-├── src/                 実装コード本体
-├── notebooks/           Jupyter Notebook(動作確認・可視化)
-└── results/             実験結果
-    └── comparison.md       LSTMとの性能比較レポート
+pip install -r requirements.txt
 ```
 
-## 使用技術
+## 実行
 
-- Python 3.10+
-- PyTorch (Transformer・LSTM 両方の実装に使用)
-- NumPy
-- Matplotlib (損失曲線・Attention可視化)
-- Jupyter
+訓練は `notebooks/10_train_compare.ipynb` を Colab GPU で実行。重みと履歴が `results/` に保存される。評価は `notebooks/11_evaluation.ipynb` をローカルで実行し、BLEU とグラフを生成。
 
-## 実装方針
+## 結果
 
-- `nn.Transformer` / `nn.MultiheadAttention` は使用せず、`nn.Linear` / `nn.LayerNorm` 等の基本部品から自作
-- LSTMは比較対象(ベースライン)なので `nn.LSTM` を使用
-- 訓練はGoogle Colabを使用予定(ローカルはCPUのみ)
+[results/comparison.md](results/comparison.md) を参照。

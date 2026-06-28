@@ -1,5 +1,3 @@
-"""LSTM Seq2Seq ベースライン (Attention 無し). Transformer と比較するための従来モデル."""
-
 import torch
 import torch.nn as nn
 

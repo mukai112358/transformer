@@ -1,5 +1,3 @@
-"""Multi30k データ準備: ダウンロード、tokenize、語彙、DataLoader."""
-
 import gzip
 import re
 import urllib.request

@@ -1,5 +1,3 @@
-"""両モデル共通の訓練ループ. model_type で forward の呼び方を切替."""
-
 import time
 
 import torch
