@@ -21,3 +21,16 @@ Thumbs.db
 # Editors / IDE
 .vscode/
 .idea/
+
+# AI assistant settings
+.claude/
+
+# Datasets (re-download in Colab)
+data/
+
+# Training outputs (regenerated in Colab)
+results/*.pkl
+results/*.pt
+
+# Old generated images
+notebooks/*.png
