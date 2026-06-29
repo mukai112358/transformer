@@ -39,12 +39,9 @@ class Vocabulary:
     def __len__(self):
         return len(self.itos)
 
-    def encode(self, tokens, add_bos_eos=False):
-        """単語列 → id 列. 未知語は UNK."""
-        ids = [self.stoi.get(t, UNK_IDX) for t in tokens]
-        if add_bos_eos:
-            ids = [BOS_IDX] + ids + [EOS_IDX]
-        return ids
+    def encode(self, tokens):
+        """単語列 → id 列. 先頭 BOS、末尾 EOS、未知語は UNK."""
+        return [BOS_IDX] + [self.stoi.get(t, UNK_IDX) for t in tokens] + [EOS_IDX]
 
 
 def load_pairs(split):
@@ -72,11 +69,8 @@ def get_dataloaders(batch_size=64, min_freq=2, num_workers=0):
     tgt_vocab = Vocabulary((t for _, t in train_pairs), min_freq=min_freq)
 
     def to_tensors(pairs):
-        return [
-            (torch.tensor(src_vocab.encode(s, add_bos_eos=True)),
-             torch.tensor(tgt_vocab.encode(t, add_bos_eos=True)))
-            for s, t in pairs
-        ]
+        return [(torch.tensor(src_vocab.encode(s)), torch.tensor(tgt_vocab.encode(t)))
+                for s, t in pairs]
 
     common = dict(batch_size=batch_size, collate_fn=collate_fn, num_workers=num_workers)
     return {
