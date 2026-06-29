@@ -17,10 +17,10 @@ Multi30k 独→英の翻訳タスクで、Transformer と素の LSTM Encoder-Dec
 
 ## 結果
 
-| モデル | パラメータ数 | 訓練時間 | 最終 train loss | 最終 val loss | BLEU |
-|---|---|---|---|---|---|
-| Transformer | 10,574,090 | 388s | 0.403 | 2.024 | **36.08** |
-| LSTM | 10,187,658 | 315s | 1.574 | 2.368 | 20.83 |
+| モデル | パラメータ数 | 最終 train loss | 最終 val loss | BLEU |
+|---|---|---|---|---|
+| Transformer | 10,574,090 | 0.403 | 2.024 | **36.08** |
+| LSTM | 10,187,658 | 1.574 | 2.368 | 20.83 |
 
 Transformer の BLEU は LSTM の約 1.7 倍。
 
