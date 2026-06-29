@@ -13,7 +13,7 @@
 - BLEU と文長別精度を計算する評価コードを src/evaluate.py に
 - Greedy Decode は Transformer と LSTMSeq2Seq それぞれの greedy_decode メソッドとして実装
 
-## 触った PyTorch
+## PyTorch
 
 - nn.Module の継承と forward の書き方
 - nn.Linear / nn.LayerNorm / nn.Embedding / nn.LSTM / nn.Dropout / nn.ModuleList
