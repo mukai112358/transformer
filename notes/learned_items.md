@@ -1,9 +1,5 @@
 # 習得項目
 
-まだ作業途中。訓練と比較が終わったら書き直す予定。
-
----
-
 ## 実装したもの
 
 - Transformer を実装。Multi-Head Attention (内部に Scaled Dot-Product Attention) / Position-wise FFN / Positional Encoding / Encoder / Decoder を src/ 配下に分割

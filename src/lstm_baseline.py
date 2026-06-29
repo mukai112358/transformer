@@ -3,9 +3,9 @@ import torch.nn as nn
 
 
 class LSTMEncoder(nn.Module):
-    def __init__(self, vocab_size, embed_dim, hidden_dim, num_layers, dropout=0.1, pad_idx=0):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_layers, dropout=0.1):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=pad_idx)
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
         self.lstm = nn.LSTM(embed_dim, hidden_dim, num_layers=num_layers,
                             dropout=dropout if num_layers > 1 else 0.0, batch_first=True)
 
@@ -14,9 +14,9 @@ class LSTMEncoder(nn.Module):
 
 
 class LSTMDecoder(nn.Module):
-    def __init__(self, vocab_size, embed_dim, hidden_dim, num_layers, dropout=0.1, pad_idx=0):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_layers, dropout=0.1):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=pad_idx)
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
         self.lstm = nn.LSTM(embed_dim, hidden_dim, num_layers=num_layers,
                             dropout=dropout if num_layers > 1 else 0.0, batch_first=True)
         self.fc = nn.Linear(hidden_dim, vocab_size)
@@ -28,10 +28,10 @@ class LSTMDecoder(nn.Module):
 
 class LSTMSeq2Seq(nn.Module):
     def __init__(self, src_vocab_size, tgt_vocab_size,
-                 embed_dim=256, hidden_dim=512, num_layers=2, dropout=0.1, pad_idx=0):
+                 embed_dim=256, hidden_dim=512, num_layers=2, dropout=0.1):
         super().__init__()
-        self.encoder = LSTMEncoder(src_vocab_size, embed_dim, hidden_dim, num_layers, dropout, pad_idx)
-        self.decoder = LSTMDecoder(tgt_vocab_size, embed_dim, hidden_dim, num_layers, dropout, pad_idx)
+        self.encoder = LSTMEncoder(src_vocab_size, embed_dim, hidden_dim, num_layers, dropout)
+        self.decoder = LSTMDecoder(tgt_vocab_size, embed_dim, hidden_dim, num_layers, dropout)
 
     def forward(self, src, tgt):
         _, hc = self.encoder(src)

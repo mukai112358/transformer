@@ -32,5 +32,5 @@ data/
 results/*.pkl
 results/*.pt
 
-# Old generated images
+# notebook 内の作業画像
 notebooks/*.png

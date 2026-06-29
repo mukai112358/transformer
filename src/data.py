@@ -15,7 +15,7 @@ SPECIALS = ['<pad>', '<bos>', '<eos>', '<unk>']
 
 
 # 単語と記号に分けるだけのシンプル tokenizer
-_TOK_RE = re.compile(r'\w+|[^\w\s]', re.UNICODE)
+_TOK_RE = re.compile(r'\w+|[^\w\s]')
 
 
 def simple_tokenize(text):

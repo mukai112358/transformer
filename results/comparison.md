@@ -22,8 +22,6 @@ Multi30k 独→英の翻訳タスクで、Transformer と素の LSTM Encoder-Dec
 | Transformer | 10,574,090 | 0.403 | 2.024 | **36.08** |
 | LSTM | 10,187,658 | 1.574 | 2.368 | 20.83 |
 
-Transformer の BLEU は LSTM の約 1.7 倍。
-
 ### 学習曲線
 
 ![](loss_curve.png)
@@ -65,7 +63,6 @@ Transformer の BLEU は LSTM の約 1.7 倍。
 
 ## 考察
 
-- BLEU で 15 ポイント以上の差は、Multi30k のような小規模翻訳でも Transformer の優位性が明確に出ることを示している
-- 文長別 BLEU で「source が長くなるほど差が広がる」結果は、Transformer の長距離依存処理の優位性を直接示す
-- 訓練時間は LSTM の方が短い (315s vs 388s) が、性能差を考えれば Transformer の方がコストパフォーマンスが高い
-- Transformer は train loss が低く val loss との乖離が大きい (0.40 vs 2.02) ので過学習気味。dropout や label smoothing を強化する余地あり
+- BLEU で 15 ポイント以上の差。Multi30k のような小規模翻訳でも Transformer の優位性が明確に出る
+- 文長別 BLEU で source が長くなるほど差が広がる結果は、Transformer の長距離依存処理の優位性を直接示す
+- Transformer は train loss と val loss の乖離が大きい (0.40 vs 2.02) ので過学習気味。dropout や label smoothing を強化する余地あり
