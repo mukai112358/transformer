@@ -37,7 +37,7 @@ Multi30k 独→英の翻訳タスクで、Transformer と素の LSTM Encoder-Dec
 | 11〜15 | 433 | 37.54 | 21.42 | +16.12 |
 | 16+ | 183 | 32.86 | 16.59 | +16.27 |
 
-文長が伸びるほど Transformer の優位が拡大している。LSTM は長距離依存の処理が弱く、source の長さが増えると性能が落ちる。Transformer は系列長に対してロバスト。
+文長が伸びるほど Transformer の優位が拡大している。LSTM は長距離依存の処理が弱く、source の長さが増えると性能が落ちる。
 
 ## 訳例 (test セットから抜粋)
 
@@ -63,6 +63,6 @@ Multi30k 独→英の翻訳タスクで、Transformer と素の LSTM Encoder-Dec
 
 ## 考察
 
-- BLEU で 15 ポイント以上の差。Multi30k のような小規模翻訳でも Transformer の優位性が明確に出る
-- 文長別 BLEU で source が長くなるほど差が広がる結果は、Transformer の長距離依存処理の優位性を直接示す
-- Transformer は train loss と val loss の乖離が大きい (0.40 vs 2.02) ので過学習気味。dropout や label smoothing を強化する余地あり
+- BLEU で 15 ポイント以上の差であり、Transformer の優位性が明確に出ている
+- 文長別 BLEU で source が長くなるほど差が広がる結果は、Transformer の長距離依存処理の優位性を示している
+- Transformer の val loss(検証データの損失)の推移を見ると、最初は急降下するが epoch6 前後で最小(約 1.57)に達し、その後は上昇に転じている。過学習していると考えられるため、最小付近の epoch6〜7 で学習を止める(early stopping)のが望ましい。
