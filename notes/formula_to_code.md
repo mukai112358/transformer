@@ -12,10 +12,9 @@
 Attention(Q, K, V) = softmax(QK^T / √d_k) V
 ```
 
-`src/attention.py:scaled_dot_product_attention`
+独立関数として書いたのは `notebooks/01_scaled_dot_product_attention.ipynb`。`src/` 側では `src/attention.py:MultiHeadAttention.forward` の中に直接書いた (head 分割の後そのまま QK^T/√d_k → softmax → ×V を計算する)。
 
-実装は Multi-Head Attention から呼ぶ前提で 4D テンソル `(batch, heads, seq_len, d_k)` を扱う。
-論文の式自体は次元に依存しない(`matmul` は先頭次元をブロードキャストする)ので、先頭に `heads` が増えても同じ式が成り立つ。
+4D テンソル `(batch, heads, seq_len, d_k)` を扱うが、`matmul` が先頭次元をブロードキャストするので、論文の式 (2D) と同じ形でそのまま計算できる。
 
 | 数式 | コード | 形状 | 意味 |
 |---|---|---|---|
@@ -60,7 +59,7 @@ MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
 | W_i^Q, W_i^K, W_i^V | `self.W_q`, `self.W_k`, `self.W_v` | (d_model, d_model) | 線形射影。実装では h 個まとめて1つの大きな nn.Linear で持つ |
 | h | `self.num_heads` | scalar | head 数 |
 | d_k | `self.d_k = d_model // num_heads` | scalar | 各 head の次元 |
-| head_i = Attention(...) | `reshape` で head 分割 → `scaled_dot_product_attention` | (batch, heads, seq, d_k) | 各 head 独立に Attention 計算 |
+| head_i = Attention(...) | `reshape` で head 分割 → `forward` 内で QK^T/√d_k → softmax → ×V を実行 | (batch, heads, seq, d_k) | 各 head 独立に Attention 計算 |
 | Concat(...) | `context.transpose(1, 2).reshape(batch_size, -1, self.d_model)` | (batch, seq, d_model) | head を結合 |
 | W^O | `self.W_o` | (d_model, d_model) | 出力射影 |
 
@@ -98,7 +97,7 @@ PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
 | 数式 | コード | 形状 | 意味 |
 |---|---|---|---|
 | pos | `position = torch.arange(0, max_seq).unsqueeze(1)` | (max_seq, 1) | 位置インデックス |
-| 1 / 10000^(2i/d_model) | `div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))` | (d_model/2,) | 周波数項(対数化して計算) |
+| 1 / 10000^(2i/d_model) | `div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model))` | (d_model/2,) | 周波数項(対数化して計算) |
 | PE(pos, 2i) | `pe[:, 0::2] = torch.sin(position * div_term)` | (max_seq, d_model/2) | 偶数列に sin |
 | PE(pos, 2i+1) | `pe[:, 1::2] = torch.cos(position * div_term)` | (max_seq, d_model/2) | 奇数列に cos |
 | 入力との加算 | `x + self.pe[:, :x.size(1), :]` | (batch, seq, d_model) | Embedding に位置情報を足す |
