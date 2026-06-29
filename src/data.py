@@ -29,11 +29,7 @@ class Vocabulary:
         counter = Counter()
         for tokens in token_iter:
             counter.update(tokens)
-        # 頻度順 (同頻度はアルファベット順) で並べて min_freq 以上を残す
-        self.itos = list(SPECIALS) + [
-            tok for tok, c in sorted(counter.items(), key=lambda x: (-x[1], x[0]))
-            if c >= min_freq and tok not in SPECIALS
-        ]
+        self.itos = SPECIALS + [tok for tok, c in counter.most_common() if c >= min_freq]
         self.stoi = {tok: i for i, tok in enumerate(self.itos)}
 
     def __len__(self):

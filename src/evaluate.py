@@ -38,12 +38,7 @@ def bleu_by_length(hyps, refs, src_lens, buckets=((1, 5), (6, 10), (11, 15), (16
     results = []
     for lo, hi in buckets:
         idx = [i for i, L in enumerate(src_lens) if lo <= L <= hi]
-        if not idx:
-            results.append({'range': f'{lo}-{hi}', 'n': 0, 'bleu': None})
-            continue
-        results.append({
-            'range': f'{lo}-{hi}',
-            'n': len(idx),
-            'bleu': compute_bleu([hyps[i] for i in idx], [refs[i] for i in idx]),
-        })
+        b_hyps = [hyps[i] for i in idx]
+        b_refs = [refs[i] for i in idx]
+        results.append({'range': f'{lo}-{hi}', 'n': len(idx), 'bleu': compute_bleu(b_hyps, b_refs)})
     return results

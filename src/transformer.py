@@ -68,19 +68,12 @@ class Transformer(nn.Module):
         output = self.generator(dec_output)
         return output
 
-    # ↓ 推論用 (notebook 07 にはない、評価のために追加)
+    # ↓ 推論用 (評価のために追加)
     @torch.no_grad()
     def greedy_decode(self, src, bos_idx=1, max_len=50):
         self.eval()
-        src_mask = self.make_src_mask(src)
-        src_emb = self.pos_encoding(self.src_embedding(src) * math.sqrt(self.d_model))
-        memory = self.encoder(src_emb, src_mask)
-
         ys = torch.full((src.size(0), 1), bos_idx, dtype=torch.long, device=src.device)
         for _ in range(max_len - 1):
-            tgt_mask = self.make_tgt_mask(ys)
-            tgt_emb = self.pos_encoding(self.tgt_embedding(ys) * math.sqrt(self.d_model))
-            dec_output = self.decoder(tgt_emb, memory, src_mask, tgt_mask)
-            next_tok = self.generator(dec_output[:, -1]).argmax(-1, keepdim=True)
-            ys = torch.cat([ys, next_tok], dim=1)
+            logits = self(src, ys)
+            ys = torch.cat([ys, logits[:, -1].argmax(-1, keepdim=True)], dim=1)
         return ys

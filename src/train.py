@@ -4,7 +4,7 @@ import torch.nn as nn
 
 def train_epoch(model, loader, criterion, optimizer, device):
     model.train()
-    total_loss, total_tokens = 0.0, 0
+    total = 0
     for src, tgt in loader:
         src, tgt = src.to(device), tgt.to(device)
         tgt_in, tgt_out = tgt[:, :-1], tgt[:, 1:]
@@ -12,31 +12,26 @@ def train_epoch(model, loader, criterion, optimizer, device):
         logits = model(src, tgt_in)
         loss = criterion(logits.reshape(-1, logits.size(-1)), tgt_out.reshape(-1))
         loss.backward()
-        nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
-        n_tok = (tgt_out != 0).sum().item()
-        total_loss += loss.item() * n_tok
-        total_tokens += n_tok
-    return total_loss / max(total_tokens, 1)
+        total += loss.item()
+    return total / len(loader)
 
 
 @torch.no_grad()
 def validate(model, loader, criterion, device):
     model.eval()
-    total_loss, total_tokens = 0.0, 0
+    total = 0
     for src, tgt in loader:
         src, tgt = src.to(device), tgt.to(device)
         tgt_in, tgt_out = tgt[:, :-1], tgt[:, 1:]
         logits = model(src, tgt_in)
         loss = criterion(logits.reshape(-1, logits.size(-1)), tgt_out.reshape(-1))
-        n_tok = (tgt_out != 0).sum().item()
-        total_loss += loss.item() * n_tok
-        total_tokens += n_tok
-    return total_loss / max(total_tokens, 1)
+        total += loss.item()
+    return total / len(loader)
 
 
-def run_training(model, train_loader, val_loader, *, epochs=20, lr=5e-4, device='cpu', pad_idx=0):
-    criterion = nn.CrossEntropyLoss(ignore_index=pad_idx)
+def run_training(model, train_loader, val_loader, epochs=20, lr=5e-4, device='cpu'):
+    criterion = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     history = {'train_loss': [], 'val_loss': []}
     model.to(device)
